@@ -26,9 +26,5 @@ def collect_drinks():
     print("Result: " + str(items))
     return items
 
-@app.route('/', methods=['GET'])
-def health():
-    return "Hello, World!\n"
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.environ.get('PORT', 8080))
