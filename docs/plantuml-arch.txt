@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+actor user
+rectangle Kafka {
+  queue "topic:drinkorders" as T1
+  queue "topic:servicewindow" as T2
+}
+rectangle "Microservice 1" {
+  agent "waiter" as A1
+}
+rectangle "Microservice 2" {
+  agent "bartender" as A2
+}
+user --> A1 : "http"
+A1 --> T1 : "produces"
+T1 --> A2 : "consumes"
+T2 <-- A2 : "produces"
+A1 <-- T2 : "consumes"
+@enduml
