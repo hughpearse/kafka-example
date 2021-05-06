@@ -7,7 +7,6 @@ consumer = KafkaConsumer('drinkorders', value_deserializer=lambda x: json.loads(
 producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('utf-8'), bootstrap_servers=kafka_hostname, api_version=(2,8,0))
 
 for message in consumer:
-    print("processing: " + str(message))
     drink = message.value["drink"]
     data = {drink : "READY"}
     producer.send('servicewindow', value=data)

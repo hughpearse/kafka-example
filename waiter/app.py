@@ -18,12 +18,10 @@ def order_drink():
 
 @app.route('/collect', methods=['GET'])
 def collect_drinks():
-    print("/collect endpoint triggered")
     items = {"drinks" : []}
     for message in consumer:
         print("processing: " + str(message))
         items["drinks"].append(message.value)
-    print("Result: " + str(items))
     return items
 
 if __name__ == '__main__':
