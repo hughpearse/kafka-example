@@ -4,6 +4,7 @@ services :
  waiter:
   build: ./waiter
   container_name: waiter
+  image: 'waiter:1.0'
   ports:
     - "8080:8080"
   environment:
@@ -15,6 +16,7 @@ services :
  bartender:
   build: ./bartender
   container_name: bartender
+  image: 'bartender:1.0'
   environment:
     KAFKA_SERVER: kafka:9092
   depends_on: 
@@ -30,7 +32,7 @@ services :
     - ALLOW_ANONYMOUS_LOGIN=yes
 
  kafka:
-   image: 'bitnami/kafka::2.8.0'
+   image: 'bitnami/kafka:2.8.0'
    container_name: kafka
    ports:
      - '9092:9092'
