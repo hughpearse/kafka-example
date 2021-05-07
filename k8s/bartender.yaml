@@ -24,18 +24,3 @@ spec:
           resources: {}
       restartPolicy: Always
 status: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: bartender
-  name: bartender
-spec:
-  ports:
-  - name: client
-    port: 2181
-  selector:
-    app: bartender
-status:
-  loadBalancer: {}

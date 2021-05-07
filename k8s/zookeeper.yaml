@@ -23,9 +23,6 @@ spec:
           name: zookeeper
           ports:
             - containerPort: 2181
-            - containerPort: 2888
-            - containerPort: 3888
-            - containerPort: 8080
           resources: {}
       restartPolicy: Always
 status: {}
@@ -41,15 +38,6 @@ spec:
     - name: "2181"
       port: 2181
       targetPort: 2181
-    - name: "2888"
-      port: 2888
-      targetPort: 2888
-    - name: "3888"
-      port: 3888
-      targetPort: 3888
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
   selector:
     app: zookeeper
 status:
