@@ -25,5 +25,7 @@ foo@bar$ cd k8s
 foo@bar$ kubectl delete all --all
 foo@bar$ kubectl apply -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
 foo@bar$ minikube tunnel --cleanup
+foo@bar$ minikube ssh 'sudo ip link set docker0 promisc on'
+foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
 foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
 ```
