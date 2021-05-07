@@ -15,7 +15,7 @@ foo@host:~$ curl -X GET -H "Accept: application/json" http://localhost:8080/coll
 
 ![architecture](./docs/plantuml-arch.png)
 
-Alternatuveely run in kubernetes
+Alternatively run in kubernetes
 
 ```bash
 foo@bar$ minikube start
