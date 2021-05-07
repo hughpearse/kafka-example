@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka
+  name: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - env:
+            - name: ALLOW_PLAINTEXT_LISTENER
+              value: "yes"
+            - name: KAFKA_CFG_ADVERTISED_LISTENERS
+              value: CLIENT://kafka:9092,EXTERNAL://localhost:9093
+            - name: KAFKA_CFG_LISTENERS
+              value: CLIENT://:9092,EXTERNAL://:9093
+            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              value: CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: CLIENT
+          image: bitnami/kafka:2.8.0
+          name: kafka
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kafka
+  name: kafka
+spec:
+  ports:
+    - name: "9092"
+      port: 9092
+      targetPort: 9092
+    - name: "9093"
+      port: 9093
+      targetPort: 9093
+  selector:
+    app: kafka
+status:
+  loadBalancer: {}

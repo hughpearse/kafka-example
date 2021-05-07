@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: waiter
+  name: waiter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: waiter
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: waiter
+    spec:
+      containers:
+        - env:
+            - name: KAFKA_SERVER
+              value: kafka:9092
+          image: waiter:1.0
+          name: waiter
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: waiter
+  name: waiter
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "waiter"
+      nodePort: 30000
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: waiter
+status:
+  loadBalancer: {}
