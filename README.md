@@ -40,6 +40,7 @@ foo@bar$ minikube start
 foo@bar$ istioctl install
 foo@bar$ kubectl label namespace default istio-injection=enabled
 foo@bar$ kubectl get ns default --show-labels
+foo@bar$ cd k8s
 foo@bar$ kubectl apply -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
 foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml
 foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/prometheus.yaml
@@ -50,9 +51,11 @@ foo@bar$ istioctl dashboard jaeger &
 foo@bar$ istioctl dashboard grafana &
 foo@bar$ istioctl dashboard prometheus &
 foo@bar$ istioctl dashboard kiali &
-foo@bar$ kubectl port-forward svc/waiter -n default 8080
-foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
-foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
+foo@bar$ cd ./../istio/
+foo@bar$ kubectl apply -f ./istio-ingress-gateway.yaml
+foo@bar$ minikube tunnel --cleanup
+foo@bar$ curl -X POST -H "Content-Type: application/json" -HHost:istio.default.waiter.com http://127.0.0.1:80/order -d '{"name":"coconut"}'
+foo@bar$ curl -HHost:istio.default.waiter.com 127.0.0.1:80/collect
 foo@bar$ killall istioctl
 ```
 
