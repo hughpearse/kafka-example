@@ -28,4 +28,51 @@ foo@bar$ minikube tunnel --cleanup
 foo@bar$ minikube ssh 'sudo ip link set docker0 promisc on'
 foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
 foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
+foo@bar$ kubectl delete -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
+foo@bar$ minikube stop
+```
+
+Run with Istio
+
+```bash
+foo@bar$ brew install istioctl
+foo@bar$ minikube start
+foo@bar$ istioctl install
+foo@bar$ kubectl label namespace default istio-injection=enabled
+foo@bar$ kubectl get ns default --show-labels
+foo@bar$ kubectl apply -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
+foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml
+foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/prometheus.yaml
+foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/grafana.yaml
+foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/jaeger.yaml
+foo@bar$ kubectl get svc -n istio-system
+foo@bar$ kubectl port-forward svc/kiali -n istio-system 20001
+foo@bar$ kubectl get svc
+foo@bar$ kubectl port-forward svc/waiter -n default 8080
+foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
+foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
+```
+
+Open Kiali dashboard at http://127.0.0.1:20001/
+
+Alternatively run in openshift
+
+```bash
+foo@bar$ minikube stop
+foo@bar$ minishift stop
+foo@bar$ minishift delete --force --clear-cache
+foo@bar$ minikube delete --all
+foo@bar$ rm -rf ~/.minishift
+foo@bar$ rm -rf ~/.kube
+foo@bar$ sudo chown root:wheel /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+foo@bar$ sudo chmod u+s /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+foo@bar$ sudo chmod u+s /usr/local/bin/hyperkit
+foo@bar$ minishift start
+foo@bar$ oc myapp .
+foo@bar$ TODO
+foo@bar$
+foo@bar$
+foo@bar$
+foo@bar$
+foo@bar$
 ```

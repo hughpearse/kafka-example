@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: waiter
+  name: waiter
+spec:
+  replicas: 1
+  selector:
+    app: waiter
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      labels:
+        app: waiter
+    spec:
+      containers:
+        - env:
+            - name: KAFKA_SERVER
+              value: kafka:9092
+          image: ' '
+          name: waiter
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - waiter
+        from:
+          kind: ImageStreamTag
+          name: waiter:1.0
+      type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: waiter
+  name: waiter
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "waiter"
+      nodePort: 30000
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: waiter
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: waiter
+  name: waiter
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: waiter:1.0
+      generation: null
+      importPolicy: {}
+      name: ""
+      referencePolicy:
+        type: ""
+status:
+  dockerImageRepository: ""
