@@ -46,14 +46,15 @@ foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-
 foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/grafana.yaml
 foo@bar$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/jaeger.yaml
 foo@bar$ kubectl get svc -n istio-system
-foo@bar$ kubectl port-forward svc/kiali -n istio-system 20001
-foo@bar$ kubectl get svc
+foo@bar$ istioctl dashboard jaeger &
+foo@bar$ istioctl dashboard grafana &
+foo@bar$ istioctl dashboard prometheus &
+foo@bar$ istioctl dashboard kiali &
 foo@bar$ kubectl port-forward svc/waiter -n default 8080
 foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
 foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
+foo@bar$ killall istioctl
 ```
-
-Open Kiali dashboard at http://127.0.0.1:20001/
 
 Alternatively run in openshift
 
