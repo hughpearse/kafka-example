@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: waiter-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - istio.default.waiter.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: waiter-virt
+spec:
+  hosts:
+  - istio.default.waiter.com
+  gateways:
+  - default/waiter-gateway
+  http:
+  - match:
+    - uri:
+        exact: /collect
+    - uri:
+        exact: /order
+    route:
+    - destination:
+        host: waiter
+        port:
+          number: 8080

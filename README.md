@@ -18,16 +18,18 @@ foo@host:~$ curl -X GET -H "Accept: application/json" http://localhost:8080/coll
 Alternatively run in kubernetes
 
 ```bash
+foo@bar$ minikube stop
+foo@bar$ minikube delete --all
+foo@bar$ rm -rf ~/.kube
 foo@bar$ minikube start
 foo@bar$ eval $(minikube docker-env)
 foo@bar$ docker-compose build
 foo@bar$ cd k8s
-foo@bar$ kubectl delete all --all
 foo@bar$ kubectl apply -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
 foo@bar$ minikube tunnel --cleanup
 foo@bar$ minikube ssh 'sudo ip link set docker0 promisc on'
 foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
-foo@bar$ curl -X GET -H "Content-Type: application/json" http://127.0.0.1:8080/collect
+foo@bar$ curl -X GET -H "Accept: application/json" http://127.0.0.1:8080/collect
 foo@bar$ kubectl delete -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
 foo@bar$ minikube stop
 ```
@@ -55,28 +57,28 @@ foo@bar$ cd ./../istio/
 foo@bar$ kubectl apply -f ./istio-ingress-gateway.yaml
 foo@bar$ minikube tunnel --cleanup
 foo@bar$ curl -X POST -H "Content-Type: application/json" -HHost:istio.default.waiter.com http://127.0.0.1:80/order -d '{"name":"coconut"}'
-foo@bar$ curl -HHost:istio.default.waiter.com 127.0.0.1:80/collect
+foo@bar$ curl -X GET -H "Accept: application/json" -HHost:istio.default.waiter.com 127.0.0.1:80/collect
 foo@bar$ killall istioctl
 ```
 
 Alternatively run in openshift
 
 ```bash
-foo@bar$ minikube stop
-foo@bar$ minishift stop
-foo@bar$ minishift delete --force --clear-cache
-foo@bar$ minikube delete --all
-foo@bar$ rm -rf ~/.minishift
-foo@bar$ rm -rf ~/.kube
-foo@bar$ sudo chown root:wheel /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-foo@bar$ sudo chmod u+s /usr/local/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
-foo@bar$ sudo chmod u+s /usr/local/bin/hyperkit
-foo@bar$ minishift start
-foo@bar$ oc myapp .
-foo@bar$ TODO
+foo@bar$ minishift start --show-libmachine-logs -v5
+foo@bar$ eval $(minishift oc-env)
+foo@bar$ eval $(minishift docker-env)
+foo@bar$ oc login -u developer
+foo@bar$ oc new-project hugh
+foo@bar$ oc project hugh
+foo@bar$ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
+TODO
+foo@bar$ docker-compose build
+foo@bar$ oc create -f ./openshift/
+foo@bar$ oc get all
+foo@bar$
+foo@bar$ minishift dashboard # username: system / password: admin
 foo@bar$
 foo@bar$
-foo@bar$
-foo@bar$
+foo@bar$ oc delete project hugh
 foo@bar$
 ```
