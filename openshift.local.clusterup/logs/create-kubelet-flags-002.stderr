@@ -1,0 +1,1 @@
+Error: unable to read node config: open /var/lib/origin/openshift.local.config/node/node-config.yaml: no such file or directory

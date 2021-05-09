@@ -64,21 +64,29 @@ foo@bar$ killall istioctl
 Alternatively run in openshift
 
 ```bash
-foo@bar$ minishift start --show-libmachine-logs -v5
+foo@bar$ minishift start --network-nameserver 8.8.8.8
 foo@bar$ eval $(minishift oc-env)
-foo@bar$ eval $(minishift docker-env)
+foo@bar$ oc login -u system:admin -n default
+foo@bar$ oc delete project demo
+foo@bar$ oc new-project demo
+foo@bar$ oc adm policy add-role-to-user system:registry developer
+foo@bar$ oc adm policy add-role-to-user system:image-builder developer
+foo@bar$ oc adm policy add-role-to-user admin developer -n demo
 foo@bar$ oc login -u developer
-foo@bar$ oc new-project hugh
-foo@bar$ oc project hugh
-foo@bar$ docker login -u developer -p $(oc whoami -t) $(minishift openshift registry)
-TODO
-foo@bar$ docker-compose build
+foo@bar$ eval $(minishift docker-env)
+foo@bar$ docker login -u $(oc whoami) -p $(oc whoami -t) $(minishift openshift registry)
+foo@bar$ docker build ./waiter -t 172.30.1.1:5000/demo/waiter:1.0
+foo@bar$ docker build ./bartender -t 172.30.1.1:5000/demo/bartender:1.0
+foo@bar$ docker push 172.30.1.1:5000/demo/waiter:1.0
+foo@bar$ docker push 172.30.1.1:5000/demo/bartender:1.0
+foo@bar$ docker-compose pull kafka zookeeper
+foo@bar$ docker tag bitnami/kafka:2.8.0 172.30.1.1:5000/demo/kafka:2.8.0
+foo@bar$ docker tag bitnami/zookeeper:3.7.0 172.30.1.1:5000/demo/zookeeper:3.7.0
+foo@bar$ docker push 172.30.1.1:5000/demo/kafka:2.8.0
+foo@bar$ docker push 172.30.1.1:5000/demo/zookeeper:3.7.0
 foo@bar$ oc create -f ./openshift/
-foo@bar$ oc get all
-foo@bar$
-foo@bar$ minishift dashboard # username: system / password: admin
-foo@bar$
-foo@bar$
-foo@bar$ oc delete project hugh
-foo@bar$
+foo@bar$ oc expose service waiter -n demo
+foo@bar$ oc get route -o=jsonpath="{range .items[*]}{.spec.host}{'\n'}"
+foo@bar$ curl waiter-demo.192.168.64.9.nip.io/collect
+foo@bar$ minishift console # developer / developer
 ```
