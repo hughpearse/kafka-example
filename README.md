@@ -15,7 +15,7 @@ foo@host:~$ curl -X GET -H "Accept: application/json" http://localhost:8080/coll
 
 ![architecture](./docs/plantuml-arch.png)
 
-Alternatively run in kubernetes
+Alternatively run in kubernetes (made with kompose)
 
 ```bash
 foo@bar$ minikube stop
@@ -32,6 +32,12 @@ foo@bar$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/
 foo@bar$ curl -X GET -H "Accept: application/json" http://127.0.0.1:8080/collect
 foo@bar$ kubectl delete -f bartender.yaml,kafka.yaml,waiter.yaml,zookeeper.yaml
 foo@bar$ minikube stop
+```
+
+made using:
+
+```bash
+foo@bar$ kompose convert
 ```
 
 Run with Istio
@@ -89,4 +95,10 @@ foo@bar$ oc expose service waiter -n demo
 foo@bar$ oc get route -o=jsonpath="{range .items[*]}{.spec.host}{'\n'}"
 foo@bar$ curl waiter-demo.192.168.64.9.nip.io/collect
 foo@bar$ minishift console # developer / developer
+```
+
+made using:
+
+```bash
+foo@bar$ kompose convert --provider=openshift
 ```
