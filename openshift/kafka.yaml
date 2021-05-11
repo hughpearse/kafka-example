@@ -73,25 +73,3 @@ spec:
     app: kafka
 status:
   loadBalancer: {}
----
-apiVersion: v1
-kind: ImageStream
-metadata:
-  labels:
-    app: kafka
-  name: kafka
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: bitnami/kafka:2.8.0
-      generation: null
-      importPolicy: {}
-      name: ""
-      referencePolicy:
-        type: ""
-status:
-  dockerImageRepository: ""

@@ -59,25 +59,3 @@ spec:
     app: zookeeper
 status:
   loadBalancer: {}
----
-apiVersion: v1
-kind: ImageStream
-metadata:
-  labels:
-    app: zookeeper
-  name: zookeeper
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: bitnami/zookeeper:3.7.0
-      generation: null
-      importPolicy: {}
-      name: ""
-      referencePolicy:
-        type: ""
-status:
-  dockerImageRepository: ""

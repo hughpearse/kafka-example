@@ -61,25 +61,3 @@ spec:
     app: waiter
 status:
   loadBalancer: {}
----
-apiVersion: v1
-kind: ImageStream
-metadata:
-  labels:
-    app: waiter
-  name: waiter
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: waiter:1.0
-      generation: null
-      importPolicy: {}
-      name: ""
-      referencePolicy:
-        type: ""
-status:
-  dockerImageRepository: ""

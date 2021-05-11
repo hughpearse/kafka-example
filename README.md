@@ -79,17 +79,18 @@ foo@bar$ oc adm policy add-role-to-user system:image-builder developer
 foo@bar$ oc adm policy add-role-to-user admin developer -n demo
 foo@bar$ oc login -u developer
 foo@bar$ eval $(minishift docker-env)
+foo@bar$ export DREG=$(minishift openshift registry)
 foo@bar$ docker login -u $(oc whoami) -p $(oc whoami -t) $(minishift openshift registry)
-foo@bar$ docker build ./waiter -t 172.30.1.1:5000/demo/waiter:1.0
-foo@bar$ docker build ./bartender -t 172.30.1.1:5000/demo/bartender:1.0
-foo@bar$ docker push 172.30.1.1:5000/demo/waiter:1.0
-foo@bar$ docker push 172.30.1.1:5000/demo/bartender:1.0
+foo@bar$ docker build ./waiter -t ${DREG}/demo/waiter:1.0
+foo@bar$ docker build ./bartender -t ${DREG}/demo/bartender:1.0
+foo@bar$ docker push ${DREG}/demo/waiter:1.0
+foo@bar$ docker push ${DREG}/demo/bartender:1.0
 foo@bar$ docker-compose pull kafka zookeeper
-foo@bar$ docker tag bitnami/kafka:2.8.0 172.30.1.1:5000/demo/kafka:2.8.0
-foo@bar$ docker tag bitnami/zookeeper:3.7.0 172.30.1.1:5000/demo/zookeeper:3.7.0
-foo@bar$ docker push 172.30.1.1:5000/demo/kafka:2.8.0
-foo@bar$ docker push 172.30.1.1:5000/demo/zookeeper:3.7.0
-foo@bar$ oc create -f ./openshift/
+foo@bar$ docker tag bitnami/kafka:2.8.0 ${DREG}/demo/kafka:2.8.0
+foo@bar$ docker tag bitnami/zookeeper:3.7.0 ${DREG}/demo/zookeeper:3.7.0
+foo@bar$ docker push ${DREG}/demo/kafka:2.8.0
+foo@bar$ docker push ${DREG}/demo/zookeeper:3.7.0
+foo@bar$ oc apply -f ./openshift/
 foo@bar$ oc expose service waiter -n demo
 foo@bar$ minishift ssh 'sudo ip link set docker0 promisc on'
 foo@bar$ oc get route -o=jsonpath="{range .items[*]}{.spec.host}{'\n'}"
