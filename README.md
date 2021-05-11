@@ -73,7 +73,6 @@ Alternatively run in openshift
 foo@bar$ minishift start --network-nameserver 8.8.8.8
 foo@bar$ eval $(minishift oc-env)
 foo@bar$ oc login -u system:admin -n default
-foo@bar$ oc delete project demo
 foo@bar$ oc new-project demo
 foo@bar$ oc adm policy add-role-to-user system:registry developer
 foo@bar$ oc adm policy add-role-to-user system:image-builder developer
@@ -92,7 +91,9 @@ foo@bar$ docker push 172.30.1.1:5000/demo/kafka:2.8.0
 foo@bar$ docker push 172.30.1.1:5000/demo/zookeeper:3.7.0
 foo@bar$ oc create -f ./openshift/
 foo@bar$ oc expose service waiter -n demo
+foo@bar$ minishift ssh 'sudo ip link set docker0 promisc on'
 foo@bar$ oc get route -o=jsonpath="{range .items[*]}{.spec.host}{'\n'}"
+foo@bar$ curl -X POST -H "Content-Type: application/json" waiter-demo.192.168.64.16.nip.io/order -d '{"name":"coconut"}'
 foo@bar$ curl waiter-demo.192.168.64.9.nip.io/collect
 foo@bar$ minishift console # developer / developer
 ```
