@@ -7,6 +7,7 @@ Run the following commands:
 ```bash
 foo@host:~$ git clone https://github.com/hughpearse/kafka-example
 foo@host:~$ cd kafka-example
+```
 
 ## Docker
 
