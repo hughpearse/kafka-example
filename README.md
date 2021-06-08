@@ -106,6 +106,17 @@ foo@bar$ curl waiter-demo.192.168.64.9.nip.io/collect
 foo@bar$ minishift console # developer / developer
 ```
 
+Test using
+
+```bash
+foo@bar$ oc scale --replicas=1 dc waiter
+foo@bar$ oc get all
+foo@bar$ siege -c255 -t10S 'waiter-demo.192.168.64.28.nip.io/order POST {"name":"coconut"}' --content-type 'application/json'
+foo@bar$ oc scale --replicas=10 dc waiter
+foo@bar$ oc get all
+foo@bar$ siege -c255 -t10S 'waiter-demo.192.168.64.28.nip.io/order POST {"name":"coconut"}' --content-type 'application/json'
+```
+
 made using:
 
 ```bash
