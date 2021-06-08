@@ -5,6 +5,12 @@ This implementation produces orders and prepares drinks.
 Run the following commands:
 
 ```bash
+foo@host:~$ git clone https://github.com/hughpearse/kafka-example
+foo@host:~$ cd kafka-example
+
+## Docker
+
+```bash
 foo@host:~$ docker stop $(docker ps -a -q)
 foo@host:~$ docker rm $(docker ps -a -q)
 foo@host:~$ docker-compose build
@@ -15,7 +21,7 @@ foo@host:~$ curl -X GET -H "Accept: application/json" http://localhost:8080/coll
 
 ![architecture](./docs/plantuml-arch.png)
 
-Alternatively run in kubernetes (made with kompose)
+## Kubernetes (made with kompose)
 
 ```bash
 foo@bar$ minikube stop
@@ -40,7 +46,7 @@ made using:
 foo@bar$ kompose convert
 ```
 
-Run with Istio
+## Kubernetes with Istio
 
 ```bash
 foo@bar$ brew install istioctl
@@ -67,7 +73,7 @@ foo@bar$ curl -X GET -H "Accept: application/json" -HHost:istio.default.waiter.c
 foo@bar$ killall istioctl
 ```
 
-Alternatively run in openshift
+## Openshift
 
 ```bash
 foo@bar$ minishift start --network-nameserver 8.8.8.8
