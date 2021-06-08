@@ -2,7 +2,9 @@
 
 This implementation produces orders and prepares drinks.
 
-Run the following commands:
+![architecture](./docs/plantuml-arch.png)
+
+Run the following commands to get started:
 
 ```bash
 foo@host:~$ git clone https://github.com/hughpearse/kafka-example
@@ -19,8 +21,6 @@ foo@host:~$ docker-compose up
 foo@host:~$ curl -X POST -H "Content-Type: application/json" http://localhost:8080/order -d '{"name":"coconut"}'
 foo@host:~$ curl -X GET -H "Accept: application/json" http://localhost:8080/collect
 ```
-
-![architecture](./docs/plantuml-arch.png)
 
 ## Kubernetes (made with kompose)
 
